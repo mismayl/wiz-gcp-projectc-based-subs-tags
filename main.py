@@ -1,19 +1,16 @@
-# Python 3.6+
-# pip install gql==3.0.0a5 aiohttp==3.7.3
 import http.client
 import json
 import os
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 
-# client_id = ""
-# client_secret = "SERVICE_ACCOUNT_CLIENT_SECRET"
+
 client_id = ""
 client_secret = ""
 api_endpoint = "https://api.us20.app.wiz.io/graphql"
 auth_endpoint = "auth.app.wiz.io"
-tagkey = "managed-by-cnrm"
-projectPrefix = "api-imsed-"
+tagkey = ""
+projectPrefix = ""
 
 def request_wiz_api_token(client_id, client_secret):
     """Retrieve an OAuth access token to be used against Wiz API"""
