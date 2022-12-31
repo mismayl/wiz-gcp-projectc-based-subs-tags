@@ -7,7 +7,7 @@ from gql.transport.aiohttp import AIOHTTPTransport
 
 client_id = ""
 client_secret = ""
-api_endpoint = "https://api.us20.app.wiz.io/graphql"
+api_endpoint = ""
 auth_endpoint = "auth.app.wiz.io"
 tagkey = ""
 projectPrefix = ""
