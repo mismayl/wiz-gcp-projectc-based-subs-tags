@@ -16,6 +16,6 @@ projectPrefix --> The profix to apped to the Wiz Project name
     
 ## Applicable use cases:
 
-The purpose of the script is to have dynamic adding of GCP projects to Wiz Projects based on the GCP project labels. This is to make sure that all onboarded subscriptions are mapped to proper Wiz Projects automatically without manual intervention. The script can be run on a regular basis (e.g. daily) to constantly update the accounts.
+The purpose of the script is to have dynamic adding of GCP subscriptions to Wiz Projects based on the GCP project labels. This is to make sure that all onboarded subscriptions are mapped to proper Wiz Projects automatically without manual intervention. The script can be run on a regular basis (e.g. daily) to constantly update the accounts.
 
 
