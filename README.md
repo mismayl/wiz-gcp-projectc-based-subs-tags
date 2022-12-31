@@ -1,9 +1,7 @@
 # wiz-gcp-projectc-based-subs-tags
 Assign GCP subscription based on labels to wiz Project
 
-# IMPORTANT: update the main,py credentials, tags and project prefix variables before running the script. The following fields are currently empty and need to be updated:
-This is the GraphQL API endpoint used by your tenant.
-Learn more about this using the Wiz API
+# IMPORTANT: update the bellow variables on main.py  before running the script. The following fields are currently empty and need to be updated:
 ```
 client_id --> introduce your Wiz  CLIENT ID
 client_secret  --> introduce your Wiz  CLIENT SECRET
