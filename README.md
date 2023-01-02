@@ -15,7 +15,14 @@ projectPrefix --> The profix to apped to the Wiz Project name
 - Install gql package
     
 ## Applicable use cases:
-
 The purpose of the script is to have dynamic adding of GCP subscriptions to Wiz Projects based on the GCP project labels. This is to make sure that all onboarded subscriptions are mapped to proper Wiz Projects automatically without manual intervention. The script can be run on a regular basis (e.g. daily) to constantly update the accounts.
 
-
+## Usage:
+- dry-run to test which projects will be created and which subscriptions will be added to the Wiz Project.
+```
+python3 main.py --dry-run yes
+```
+- Run the script.
+```
+python3 main.py
+```
