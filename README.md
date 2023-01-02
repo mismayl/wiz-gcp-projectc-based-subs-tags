@@ -6,7 +6,7 @@ Assign GCP subscription based on labels to wiz Project
 client_id --> introduce your Wiz  CLIENT ID
 client_secret  --> introduce your Wiz  CLIENT SECRET
 api_endpoint --> This is the GraphQL API endpoint used by your tenant.
-tagkey --> The GCP label that should be used to map the GCP project to the Wiz Project
+tagkey --> The GCP label that should be used to map the GCP subscripton to the Wiz Project
 projectPrefix --> The profix to apped to the Wiz Project name
 ```
 
