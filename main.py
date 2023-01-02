@@ -1,16 +1,30 @@
+# Python 3.6+
+# pip install gql==3.0.0a5 aiohttp==3.7.3
 import http.client
+import dryable
+import argparse
+import sys
 import json
 import os
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 
-
+# client_id = ""
+# client_secret = "SERVICE_ACCOUNT_CLIENT_SECRET"
 client_id = ""
 client_secret = ""
 api_endpoint = ""
 auth_endpoint = "auth.app.wiz.io"
 tagkey = ""
 projectPrefix = ""
+
+dryable.set( '--dry-run' in sys.argv and 'yes' in sys.argv)
+
+parser=argparse.ArgumentParser(
+    description='''Assign GCP subscriptions based on labels to wiz Projects ''',
+    epilog="""All is well that ends well.""")
+parser.add_argument('--dry-run', choices =['yes','no'], default='no', help='dry run, will not create new Wiz project and will not assign GCP subscriptions to WIZ projects')
+args=parser.parse_args()
 
 def request_wiz_api_token(client_id, client_secret):
     """Retrieve an OAuth access token to be used against Wiz API"""
@@ -116,7 +130,6 @@ def getSubs_wiz_api(access_token):
                 print("Retry")
 
     return subs_nodes
-
 
 def getProjects_wiz_api(access_token):
     query = gql("""
@@ -254,6 +267,7 @@ def getProject_based_name_wiz_api(access_token, project_name):
 
     return exact_match_projects
 
+@dryable.Dryable()
 def createProject_wiz_api(access_token, p_name):
     createProjectsquery = gql("""
         mutation CreateProject($input: CreateProjectInput!) {
@@ -301,7 +315,7 @@ def createProject_wiz_api(access_token, p_name):
 
     return result
 
-
+@dryable.Dryable()
 def addSubToProject_via_wiz_api(access_token, projectId, cloudAccounts_list):
     query = gql("""
     mutation UpdateProject($input: UpdateProjectInput!) {
@@ -339,7 +353,6 @@ def ifProject_exist(projectNodes,projectName):
             return exist
     return exist
 
-
 def getSubs_tagValue(subs_nodes):
     subs_list = []
     tagValue_list =[]
@@ -366,17 +379,17 @@ def main():
     for sub in getSubs_tagValue(subs_nodes)[0]:
         project_name = projectPrefix+sub[tagkey]
         project = getProject_based_name_wiz_api(token,project_name)
-        cloudAccounts_list= [{'cloudAccount': link['cloudAccount']['id'],'environment':link['environment'],'shared':link['shared']}   for link in project[0]['cloudAccountLinks']]
-        if sub ['id'] in [cloudAccount['cloudAccount'] for cloudAccount in cloudAccounts_list]:
-            print ("Subscription "+sub['name']+" is already assigned to project "+project_name)
-            addSubToProject_via_wiz_api(token, project[0]['id'], cloudAccounts_list)
-        else:
-            cloudAccounts_list.append({'cloudAccount': sub['id'],'environment': 'PRODUCTION','shared': False})
+
+        if len(project) == 0 and '--dry-run' in sys.argv and 'yes' in sys.argv:
             print ("adding subscription "+sub['name']+" to project "+project_name)
-            addSubToProject_via_wiz_api(token, project[0]['id'], cloudAccounts_list)
-
-
-
+        else:
+            cloudAccounts_list= [{'cloudAccount': link['cloudAccount']['id'],'environment':link['environment'],'shared':link['shared']}   for link in project[0]['cloudAccountLinks']]   
+            if sub ['id'] in [cloudAccount['cloudAccount'] for cloudAccount in cloudAccounts_list]:
+                print ("Subscription "+sub['name']+" is already assigned to project "+project_name)
+            else:
+                cloudAccounts_list.append({'cloudAccount': sub['id'],'environment': 'PRODUCTION','shared': False})
+                print ("adding subscription "+sub['name']+" to project "+project_name)
+                addSubToProject_via_wiz_api(token, project[0]['id'], cloudAccounts_list)
 
 
 if __name__ == '__main__':
